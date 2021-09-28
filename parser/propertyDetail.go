@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/anaskhan96/soup"
 	"github.com/weishunliao/crawler/engine"
-	"time"
 )
 
 
@@ -20,8 +19,8 @@ func ParsePropertyDetail(data []byte) engine.ParseResult {
 			saleInfo[i / 2] = info.Text()
 		}
 	}
-	fmt.Println(addInfo)
-	fmt.Println(saleInfo)
-	time.Sleep(2 * time.Second)
+	fmt.Println("addInfo: ",addInfo)
+	fmt.Println("saleInfo: ",saleInfo)
+	//time.Sleep(2 * time.Second)
 	return engine.ParseResult{}
 }
