@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/weishunliao/crawler/engine"
 	"github.com/weishunliao/crawler/parser"
+	"github.com/weishunliao/crawler/scheduler"
 	"strconv"
 	"time"
 )
@@ -13,10 +14,19 @@ const BaseUrl = "https://www.propertypriceregister.ie/Website/npsra/PPR/npsra-pp
 func main() {
 	start := time.Now().UTC()
 	fmt.Println("Start, ", start)
-	engine.Run(engine.Request{
+	concurrentEngine := engine.ConcurrentEngine{
+		Scheduler: &scheduler.SimpleScheduler{},
+		WorkerCount: 10,
+	}
+
+	concurrentEngine.Run(engine.Request{
 		Url:       getUrl("Tipperary", 2021, 1, 1),
 		ParseFunc: parser.ParsePropertyList,
 	})
+	//engine.SingleEngine{}.Run(engine.Request{
+	//	Url:       getUrl("Tipperary", 2021, 1, 1),
+	//	ParseFunc: parser.ParsePropertyList,
+	//})
 	fmt.Println("Done, duration:", time.Now().Sub(start).Seconds())
 }
 
