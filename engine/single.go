@@ -12,7 +12,7 @@ func (engine SingleEngine) Run(seeds ...Request) {
 		req := queue[0]
 		queue = queue[1:]
 
-		parseResult, err := Worker(req)
+		parseResult, err := Execute(req)
 		if err != nil {
 			queue = append(queue, req)
 		}

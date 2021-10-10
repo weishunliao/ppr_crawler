@@ -21,10 +21,10 @@ type ReadyNotifier interface {
 }
 
 func (engine *ConcurrentEngine) Run(seeds ...Request) {
-	out := make(chan ParseResult)
+	outputChannel := make(chan ParseResult)
 	engine.Scheduler.Run()
 	for i := 0; i < engine.WorkerCount; i++ {
-		createWorker(engine.Scheduler.WorkerChan(), out, engine.Scheduler)
+		createWorker(engine.Scheduler.WorkerChan(), outputChannel, engine.Scheduler)
 	}
 
 	for _, r := range seeds {
@@ -32,7 +32,7 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	}
 
 	for {
-		resp := <- out
+		resp := <- outputChannel
 		for _, property := range resp.Properties {
 			fmt.Println("get property: ", property)
 		}
@@ -42,16 +42,16 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	}
 }
 
-func createWorker(in chan Request, out chan ParseResult,  notifier ReadyNotifier) {
+func createWorker(inputChannel chan Request, outputChannel chan ParseResult,  notifier ReadyNotifier) {
 	go func() {
 		for {
-			notifier.WorkerReady(in)
-			request := <- in
-			result, err := Worker(request)
+			notifier.WorkerReady(inputChannel)
+			request := <- inputChannel
+			result, err := Execute(request)
 			if err != nil {
 				continue
 			}
-			out <- result
+			outputChannel <- result
 		}
 	}()
 }

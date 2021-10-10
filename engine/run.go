@@ -5,7 +5,7 @@ import (
 	"github.com/weishunliao/crawler/fetcher"
 )
 
-func Worker(req Request) (ParseResult, error) {
+func Execute(req Request) (ParseResult, error) {
 	resp, err := fetcher.Fetch(req.Url)
 	if err != nil {
 		fmt.Printf("Fetch Fail, err: %v\n", err)
