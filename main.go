@@ -15,7 +15,8 @@ func main() {
 	start := time.Now().UTC()
 	fmt.Println("Start, ", start)
 	concurrentEngine := engine.ConcurrentEngine{
-		Scheduler: &scheduler.SimpleScheduler{},
+		//Scheduler: &scheduler.SimpleScheduler{},
+		Scheduler: &scheduler.QueueScheduler{},
 		WorkerCount: 10,
 	}
 
