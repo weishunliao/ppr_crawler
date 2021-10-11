@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/weishunliao/crawler/engine"
 	"github.com/weishunliao/crawler/parser"
+	"github.com/weishunliao/crawler/persist"
 	"github.com/weishunliao/crawler/scheduler"
 	"strconv"
 	"time"
@@ -13,11 +14,12 @@ const BaseUrl = "https://www.propertypriceregister.ie/Website/npsra/PPR/npsra-pp
 
 func main() {
 	start := time.Now().UTC()
-	fmt.Println("Start, ", start)
+	fmt.Println("Start at: ", start)
 	concurrentEngine := engine.ConcurrentEngine{
 		//Scheduler: &scheduler.SimpleScheduler{},
 		Scheduler: &scheduler.QueueScheduler{},
 		WorkerCount: 10,
+		PropertyChan: persist.PropertySaver(),
 	}
 
 	concurrentEngine.Run(engine.Request{

@@ -1,26 +1,30 @@
 package parser
 
 import (
-	"fmt"
 	"github.com/anaskhan96/soup"
 	"github.com/weishunliao/crawler/engine"
+	"regexp"
 )
 
 
 func ParsePropertyDetail(data []byte) engine.ParseResult {
+	re := regexp.MustCompile(pprIdRe)
+	match := re.FindSubmatch(data)
 	doc := soup.HTMLParse(string(data))
-	addInfo := make([]string, 6)
-	saleInfo := make([]string, 6)
+	pprInfo := make([]string, 13)
+	pprInfo[0] = string(match[1])
 	for i, info := range doc.Find("table", "id", "AddInfo").FindAll("td") {
-		addInfo[i] = info.Text()
+		pprInfo[i + 1] = info.Text()
 	}
 	for i, info := range doc.Find("table", "id", "SaleInfo").FindAll("td") {
 		if i % 2 != 0 {
-			saleInfo[i / 2] = info.Text()
+			pprInfo[(i / 2) + 7] = info.Text()
 		}
 	}
-	fmt.Println("addInfo: ",addInfo)
-	fmt.Println("saleInfo: ",saleInfo)
+	//fmt.Println("pprInfo: ",pprInfo)
 	//time.Sleep(2 * time.Second)
-	return engine.ParseResult{}
+	result := engine.ParseResult{}
+	result.Properties = append(result.Properties, pprInfo)
+	result.Store = true
+	return result
 }

@@ -1,12 +1,9 @@
 package engine
 
-import (
-	"fmt"
-)
-
 type ConcurrentEngine struct {
 	Scheduler Scheduler
 	WorkerCount int
+	PropertyChan chan interface{}
 }
 
 type Scheduler interface {
@@ -34,7 +31,11 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	for {
 		resp := <- outputChannel
 		for _, property := range resp.Properties {
-			fmt.Println("get property: ", property)
+			go func() {
+				if resp.Store {
+					engine.PropertyChan <- property
+				}
+			}()
 		}
 		for _, req := range resp.Requests {
 			engine.Scheduler.Submit(req)
