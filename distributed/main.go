@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/weishunliao/crawler/config"
+	"github.com/weishunliao/crawler/distributed/persist/client"
 	"github.com/weishunliao/crawler/engine"
 	"github.com/weishunliao/crawler/parser"
-	"github.com/weishunliao/crawler/persist"
 	"github.com/weishunliao/crawler/scheduler"
 	"strconv"
 	"time"
@@ -15,12 +16,11 @@ const BaseUrl = "https://www.propertypriceregister.ie/Website/npsra/PPR/npsra-pp
 func main() {
 	start := time.Now().UTC()
 	fmt.Println("Start at: ", start)
-	propertyChan, err := persist.PropertySaver()
+	propertyChan, err := client.PropertySaver(fmt.Sprintf(":%d", config.PropertySaverPort))
 	if err != nil {
 		panic(err)
 	}
 	concurrentEngine := engine.ConcurrentEngine{
-		//Scheduler: &scheduler.SimpleScheduler{},
 		Scheduler: &scheduler.QueueScheduler{},
 		WorkerCount: 10,
 		PropertyChan: propertyChan,
@@ -30,10 +30,6 @@ func main() {
 		Url:       getUrl("Dublin", 2020, 1, 1),
 		ParseFunc: parser.ParsePropertyList,
 	})
-	//engine.SingleEngine{}.Run(engine.Request{
-	//	Url:       getUrl("Tipperary", 2021, 1, 1),
-	//	ParseFunc: parser.ParsePropertyList,
-	//})
 	fmt.Println("Done, duration:", time.Now().Sub(start).Seconds())
 }
 

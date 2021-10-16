@@ -9,7 +9,7 @@ import (
 
 func ServeRPC(host string, service interface{}) error {
 	rpc.Register(service)
-
+	log.Println("Save server running...")
 	listener, err := net.Listen("tcp", host)
 	if err != nil {
 		panic(err)
