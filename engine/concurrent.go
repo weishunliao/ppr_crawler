@@ -3,7 +3,7 @@ package engine
 type ConcurrentEngine struct {
 	Scheduler Scheduler
 	WorkerCount int
-	PropertyChan chan interface{}
+	PropertyChan chan Property
 }
 
 type Scheduler interface {

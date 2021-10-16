@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esapi"
+	"github.com/weishunliao/crawler/engine"
 	"log"
 	"strings"
 )
 
-func PropertySaver() (chan interface{}, error) {
-	out := make(chan interface{})
+func PropertySaver() (chan engine.Property, error) {
+	out := make(chan engine.Property)
 	esClient, _ := elasticsearch.NewDefaultClient()
 	res, err := esClient.Info()
 	defer res.Body.Close()
@@ -45,6 +46,6 @@ func save(property interface{}, esClient *elasticsearch.Client) {
 	if res.IsError() {
 		log.Printf("[%s] Error indexing document ID=%s", res.Status(), data["id"])
 	} else {
-		log.Printf("Indexing document ID=%s done", data["id"])
+		log.Printf("Indexing document ID=%s done. %s", data["id"], data["dateOfSale"])
 	}
 }

@@ -27,7 +27,7 @@ func main() {
 	}
 
 	concurrentEngine.Run(engine.Request{
-		Url:       getUrl("Tipperary", 2021, 5, 10),
+		Url:       getUrl("Dublin", 2020, 1, 1),
 		ParseFunc: parser.ParsePropertyList,
 	})
 	//engine.SingleEngine{}.Run(engine.Request{
