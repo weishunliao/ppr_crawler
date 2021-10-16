@@ -17,6 +17,8 @@ func PropertySaver(host string) (chan engine.Property, error) {
 		for {
 			property := <- out
 			result := ""
+
+			// Call RPC to save properties
 			err = client.Call(config.PropertySaverRPC, property, &result)
 			if err != nil {
 				log.Println(err)
