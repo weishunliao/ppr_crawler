@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"fmt"
 	"github.com/weishunliao/crawler/engine"
+	"log"
 	"regexp"
 )
 
@@ -12,7 +12,7 @@ func ParsePropertyList(data []byte) engine.ParseResult {
 	result := engine.ParseResult{}
 	re1 := regexp.MustCompile(pprIdRe)
 	pprIds := re1.FindAllSubmatch(data, -1)
-	fmt.Printf("Total: %d\n", len(pprIds))
+	log.Printf("Total: %d\n", len(pprIds))
 	for _, match := range pprIds {
 		result.Properties = append(result.Properties, "id-" + string(match[1]))
 		result.Requests = append(result.Requests, engine.Request{

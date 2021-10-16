@@ -21,10 +21,24 @@ func ParsePropertyDetail(data []byte) engine.ParseResult {
 			pprInfo[(i / 2) + 7] = info.Text()
 		}
 	}
-	//fmt.Println("pprInfo: ",pprInfo)
-	//time.Sleep(2 * time.Second)
+
+	m := make(map[string]string)
+
+	m["id"] = pprInfo[0]
+	m["address1"] = pprInfo[1]
+	m["address2"] = pprInfo[2]
+	m["address3"] = pprInfo[3]
+	m["address4"] = pprInfo[4]
+	m["address5"] = pprInfo[5]
+	m["eircode"] = pprInfo[6]
+	m["dateOfSale"] = pprInfo[7]
+	m["price"] = pprInfo[8]
+	m["notFullMarketPrice"] = pprInfo[9]
+	m["VATExclusive"] = pprInfo[10]
+	m["description"] = pprInfo[11]
+
 	result := engine.ParseResult{}
-	result.Properties = append(result.Properties, pprInfo)
+	result.Properties = append(result.Properties, m)
 	result.Store = true
 	return result
 }

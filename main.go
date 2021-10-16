@@ -15,15 +15,19 @@ const BaseUrl = "https://www.propertypriceregister.ie/Website/npsra/PPR/npsra-pp
 func main() {
 	start := time.Now().UTC()
 	fmt.Println("Start at: ", start)
+	saver, err := persist.PropertySaver()
+	if err != nil {
+		panic(err)
+	}
 	concurrentEngine := engine.ConcurrentEngine{
 		//Scheduler: &scheduler.SimpleScheduler{},
 		Scheduler: &scheduler.QueueScheduler{},
 		WorkerCount: 10,
-		PropertyChan: persist.PropertySaver(),
+		PropertyChan: saver,
 	}
 
 	concurrentEngine.Run(engine.Request{
-		Url:       getUrl("Tipperary", 2021, 1, 1),
+		Url:       getUrl("Tipperary", 2021, 5, 10),
 		ParseFunc: parser.ParsePropertyList,
 	})
 	//engine.SingleEngine{}.Run(engine.Request{
